@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>武汉城市分公司 交付负责人日报 - 2025年08月13日</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title .icon {
+            margin-right: 12px;
+            font-size: 1.2em;
+        }
+
+        /* 关键问题总结样式 */
+        .summary-box {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffa726 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            font-size: 1.3em;
+            line-height: 1.8;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+        }
+
+        /* 模块分析样式 */
+        .module {
+            background: #f8f9ff;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .module-title {
+            font-size: 1.4em;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .module-badge {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .insight-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .insight-title {
+            font-weight: 600;
+            color: #1976d2;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .insight-title .icon {
+            margin-right: 8px;
+        }
+
+        .suggestion-box {
+            background: #f3e5f5;
+            border-left: 4px solid #9c27b0;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .suggestion-title {
+            font-weight: 600;
+            color: #7b1fa2;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .suggestion-title .icon {
+            margin-right: 8px;
+        }
+
+        /* 数据表格样式 */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .data-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* 督办样式 */
+        .supervision-person {
+            background: #fff3e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid #ff9800;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .person-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .person-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .person-name {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #e65100;
+            margin-right: 15px;
+        }
+
+        .person-detail {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .priority-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .priority-high {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .priority-medium {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .priority-low {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .supervision-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 3px solid #ff9800;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76,175,80,0.3);
+        }
+
+        /* 空数据样式 */
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-style: italic;
+        }
+
+        .no-supervision {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        /* 页脚样式 */
+        .footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .data-table {
+                font-size: 0.9em;
+            }
+            
+            .person-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .person-info {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>武汉城市分公司 交付负责人日报</h1>
+            <div class="subtitle">2025年08月13日 | 生成时间: 2025-08-13 16:42:49</div>
+        </div>
+
+        <div class="content">
+            <!-- 第一部分：关键问题总结 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">🚨</span>
+                    关键问题总结
+                </div>
+                <div class="summary-box">
+                    关键问题总结：
+1. 开工管理：核心数据表"yanxuan.project_table"缺失，导致无法获取武汉分公司延期工地数据，严重影响开工进度监控。
+2. 施工管理：同样因"yanxuan.project_table"缺失，施工延期情况完全无法统计，延误风险管控处于失控状态。
+3. 收款管理：关键数据表"yanxuan.order_table"不存在，导致超期收款金额和订单数无法追踪，资金回笼风险极高。
+                </div>
+            </div>
+
+            <!-- 第二部分：分模块分析 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">📊</span>
+                    分模块分析
+                </div>
+                
+                
+                <div class="module">
+                    <div class="module-header">
+                        <div class="module-title">开工管理</div>
+                        <div class="module-badge">0 条数据</div>
+                    </div>
+
+                    <!-- 问题洞察 -->
+                    <div class="insight-box">
+                        <div class="insight-title">
+                            <span class="icon">📊</span>
+                            问题洞察
+                        </div>
+                        <div>数据获取失败: Execution failed on sql 'WITH hr_lookup AS (
+  SELECT DISTINCT ON (name) 
+    qw_user_id, name, position_name, department 
+  FROM yanxuan.dim_yx_ehr_detail_d
+  WHERE qw_user_id IS NOT NULL AND qw_user_id != ''
+  ORDER BY name, update_time DESC
+)
+SELECT 
+  p.交付管理 as 执行负责人,
+  hr.qw_user_id as 企业微信userid,
+  hr.department as 部门,
+  hr.position_name as 职位,
+  COUNT(*) as 延期工地数,
+  ROUND(AVG(EXTRACT(day FROM (CURRENT_DATE - p.计划开工日期))), 2) as 平均延期天数,
+  ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) as 延期率,
+  STRING_AGG(p.项目名称, ', ') as 延期项目列表
+FROM yanxuan.project_table p
+LEFT JOIN hr_lookup hr ON p.交付管理 = hr.name
+WHERE p.城市 = '武汉城市分公司' 
+  AND p.计划开工日期 < CURRENT_DATE 
+  AND p.实际开工日期 IS NULL
+  AND p.交付管理 IS NOT NULL
+GROUP BY p.交付管理, hr.qw_user_id, hr.department, hr.position_name
+HAVING COUNT(*) > 0
+ORDER BY COUNT(*) DESC
+': 错误:  关系 "yanxuan.project_table" 不存在
+LINE 17: FROM yanxuan.project_table p
+              ^
+</div>
+                    </div>
+
+                    <!-- 数据详情 -->
+                    <div class="data-section">
+                        <h4>📋 数据详情</h4>
+                        
+                        <div class="no-data">暂无数据</div>
+                        
+                    </div>
+
+                    <!-- 行动建议 -->
+                    <div class="suggestion-box">
+                        <div class="suggestion-title">
+                            <span class="icon">🚀</span>
+                            行动建议
+                        </div>
+                        <div>请检查数据库连接和SQL配置</div>
+                    </div>
+                </div>
+                
+                <div class="module">
+                    <div class="module-header">
+                        <div class="module-title">施工管理</div>
+                        <div class="module-badge">0 条数据</div>
+                    </div>
+
+                    <!-- 问题洞察 -->
+                    <div class="insight-box">
+                        <div class="insight-title">
+                            <span class="icon">📊</span>
+                            问题洞察
+                        </div>
+                        <div>数据获取失败: Execution failed on sql 'WITH hr_lookup AS (
+  SELECT DISTINCT ON (name) 
+    qw_user_id, name, position_name, department 
+  FROM yanxuan.dim_yx_ehr_detail_d
+  WHERE qw_user_id IS NOT NULL AND qw_user_id != ''
+  ORDER BY name, update_time DESC
+)
+SELECT 
+  p.交付管理 as 执行负责人,
+  hr.qw_user_id as 企业微信userid,
+  hr.department as 部门,
+  hr.position_name as 职位,
+  COUNT(*) as 施工延期数,
+  ROUND(AVG(EXTRACT(day FROM (CURRENT_DATE - p.计划完工日期))), 2) as 平均延期天数,
+  ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) as 延期率,
+  SUM(p.合同金额) as 涉及金额,
+  STRING_AGG(p.项目名称, ', ') as 延期项目列表
+FROM yanxuan.project_table p
+LEFT JOIN hr_lookup hr ON p.交付管理 = hr.name
+WHERE p.城市 = '武汉城市分公司' 
+  AND p.计划完工日期 < CURRENT_DATE 
+  AND p.实际完工日期 IS NULL
+  AND p.实际开工日期 IS NOT NULL
+  AND p.交付管理 IS NOT NULL
+GROUP BY p.交付管理, hr.qw_user_id, hr.department, hr.position_name
+HAVING COUNT(*) > 0
+ORDER BY COUNT(*) DESC
+': 错误:  关系 "yanxuan.project_table" 不存在
+LINE 18: FROM yanxuan.project_table p
+              ^
+</div>
+                    </div>
+
+                    <!-- 数据详情 -->
+                    <div class="data-section">
+                        <h4>📋 数据详情</h4>
+                        
+                        <div class="no-data">暂无数据</div>
+                        
+                    </div>
+
+                    <!-- 行动建议 -->
+                    <div class="suggestion-box">
+                        <div class="suggestion-title">
+                            <span class="icon">🚀</span>
+                            行动建议
+                        </div>
+                        <div>请检查数据库连接和SQL配置</div>
+                    </div>
+                </div>
+                
+                <div class="module">
+                    <div class="module-header">
+                        <div class="module-title">收款管理</div>
+                        <div class="module-badge">0 条数据</div>
+                    </div>
+
+                    <!-- 问题洞察 -->
+                    <div class="insight-box">
+                        <div class="insight-title">
+                            <span class="icon">📊</span>
+                            问题洞察
+                        </div>
+                        <div>数据获取失败: Execution failed on sql 'WITH hr_lookup AS (
+  SELECT DISTINCT ON (name) 
+    qw_user_id, name, position_name, department 
+  FROM yanxuan.dim_yx_ehr_detail_d
+  WHERE qw_user_id IS NOT NULL AND qw_user_id != ''
+  ORDER BY name, update_time DESC
+)
+SELECT 
+  o.负责人 as 执行负责人,
+  hr.qw_user_id as 企业微信userid,
+  hr.department as 部门,
+  hr.position_name as 职位,
+  COUNT(*) as 超期订单数,
+  ROUND(AVG(EXTRACT(day FROM (CURRENT_DATE - o.约定收款日期))), 2) as 平均超期天数,
+  ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) as 超期率,
+  SUM(o.未收金额) as 超期总金额,
+  STRING_AGG(o.订单编号, ', ') as 超期订单列表
+FROM yanxuan.order_table o
+LEFT JOIN hr_lookup hr ON o.负责人 = hr.name
+WHERE o.城市 = '武汉城市分公司' 
+  AND o.约定收款日期 < CURRENT_DATE 
+  AND o.收款状态 != '已完成'
+  AND o.负责人 IS NOT NULL
+  AND o.未收金额 > 0
+GROUP BY o.负责人, hr.qw_user_id, hr.department, hr.position_name
+HAVING COUNT(*) > 0
+ORDER BY SUM(o.未收金额) DESC
+': 错误:  关系 "yanxuan.order_table" 不存在
+LINE 18: FROM yanxuan.order_table o
+              ^
+</div>
+                    </div>
+
+                    <!-- 数据详情 -->
+                    <div class="data-section">
+                        <h4>📋 数据详情</h4>
+                        
+                        <div class="no-data">暂无数据</div>
+                        
+                    </div>
+
+                    <!-- 行动建议 -->
+                    <div class="suggestion-box">
+                        <div class="suggestion-title">
+                            <span class="icon">🚀</span>
+                            行动建议
+                        </div>
+                        <div>请检查数据库连接和SQL配置</div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- 第三部分：一键督办 -->
+            <div class="section">
+                <div class="section-title">
+                    <span class="icon">📢</span>
+                    一键督办
+                </div>
+                
+                
+                <div class="no-supervision">
+                    🎉 恭喜！当前无需督办，各项工作进展良好。
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="footer">
+            报告由AI智能分析生成 | 数据来源：企业数据仓库 | 
+            分析模块：3 个 | 发现问题：0 个
+        </div>
+    </div>
+
+    <script>
+        function sendSupervision(userId, personName) {
+            if (!userId) {
+                alert(`${personName} 没有企业微信ID，无法发送督办消息`);
+                return;
+            }
+
+            if (confirm(`确定要向 ${personName} 发送督办消息吗？`)) {
+                // 这里可以调用API发送督办消息
+                fetch('/api/send_supervision', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        person_name: personName
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert('督办消息发送成功！');
+                    } else {
+                        alert('发送失败：' + data.message);
+                    }
+                })
+                .catch(error => {
+                    alert('发送失败：' + error.message);
+                });
+            }
+        }
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('日报页面加载完成');
+        });
+    </script>
+</body>
+</html>

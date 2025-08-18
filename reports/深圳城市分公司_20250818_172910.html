@@ -1,0 +1,3582 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深圳城市分公司 交付管理日报</title>
+    <!-- Markdown渲染库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 300;
+        }
+        .header .subtitle {
+            margin-top: 10px;
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 4px;
+        }
+        .card h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 18px;
+        }
+        .card .metric {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .module-section {
+            margin-bottom: 40px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .module-header {
+            background: #667eea;
+            color: white;
+            padding: 15px 20px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .module-content {
+            padding: 20px;
+        }
+        .analysis-text {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 15px 0;
+            white-space: pre-line;
+            line-height: 1.8;
+        }
+        /* 表格容器 - 支持水平滑动 */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-height: 400px; /* 限制表格最大高度 */
+            overflow-y: auto; /* 支持垂直滑动 */
+        }
+        
+        .data-table {
+            width: 100%;
+            min-width: 800px; /* 设置最小宽度，确保表格不会过度压缩 */
+            border-collapse: collapse;
+            margin: 0;
+            font-size: 14px;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        .data-table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+            color: #333;
+        }
+        .data-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        /* Markdown渲染样式 */
+        .markdown-content {
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .markdown-content h1, .markdown-content h2, .markdown-content h3 {
+            color: #2c3e50;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .markdown-content h2 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            font-size: 18px;
+        }
+        
+        .markdown-content h3 {
+            color: #e74c3c;
+            font-size: 16px;
+        }
+        
+        .markdown-content ul, .markdown-content ol {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        
+        .markdown-content li {
+            margin: 5px 0;
+        }
+        
+        .markdown-content strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .markdown-content code {
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #e74c3c;
+        }
+        
+        .markdown-content blockquote {
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+            padding: 10px 15px;
+            background-color: #f8f9fa;
+            color: #555;
+        }
+
+        /* Markdown表格样式 */
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-size: 13px;
+        }
+        
+        .markdown-content th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .markdown-content td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e0e6ed;
+            vertical-align: top;
+            word-break: break-word;
+        }
+        
+        .markdown-content tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .markdown-content tr:hover {
+            background-color: #e3f2fd;
+        }
+        
+        /* 表格数据高亮 */
+        .markdown-content td:first-child {
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        /* 数字列右对齐 */
+        .markdown-content td:nth-child(n+3) {
+            text-align: right;
+        }
+        
+        /* 表格响应式 */
+        @media (max-width: 768px) {
+            .markdown-content table {
+                font-size: 12px;
+            }
+            
+            .markdown-content th,
+            .markdown-content td {
+                padding: 8px 4px;
+            }
+        }
+        .risk-high { color: #d73027; font-weight: bold; }
+        .risk-medium { color: #f46d43; font-weight: bold; }
+        .risk-low { color: #74add1; }
+        .no-data {
+            text-align: center;
+            color: #999;
+            padding: 40px;
+            font-style: italic;
+        }
+        
+        /* 待办事项样式 */
+        .todos-section {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+        .todos-header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .todos-header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .todos-header .subtitle {
+            margin-top: 8px;
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        .todos-content {
+            padding: 20px;
+        }
+        .executor-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .executor-header {
+            background: #667eea;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .executor-info h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .executor-info .role {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+        .supervise-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .supervise-btn:hover {
+            background: #c82333;
+        }
+        .supervise-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        .todo-list {
+            padding: 20px;
+        }
+        .todo-item {
+            border-left: 4px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f9f9f9;
+            border-radius: 0 4px 4px 0;
+        }
+        .todo-item.priority-high {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+        .todo-item.priority-medium {
+            border-left-color: #ffc107;
+            background: #fffdf5;
+        }
+        .todo-item.priority-low {
+            border-left-color: #28a745;
+            background: #f5fff5;
+        }
+        .todo-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .priority-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .priority-badge.high {
+            background: #dc3545;
+            color: white;
+        }
+        .priority-badge.medium {
+            background: #ffc107;
+            color: #333;
+        }
+        .priority-badge.low {
+            background: #28a745;
+            color: white;
+        }
+        .todo-description {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        .todo-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+            color: #888;
+        }
+        .todo-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .todos-summary {
+            background: #e8f4fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .todos-summary h4 {
+            color: #1976D2;
+            margin: 0 0 10px 0;
+        }
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1976D2;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>深圳城市分公司 交付管理日报</h1>
+            <div class="subtitle">2025年08月18日 | 开工·施工·收款 综合监控</div>
+        </div>
+        
+        <div class="content">
+            
+            
+            
+            <div class="alert-section" style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                <div class="alert-title" style="color: #d73027; margin-bottom: 10px; font-weight: bold;">🚨 异常总计</div>
+                <div class="alert-content markdown-content" data-markdown="### 工期管理督办指令
+
+当前工地延期问题突出，多个项目拆除与保护、水电及竣工阶段延期均超过30天，严重影响整体交付进度。
+
+最严重问题：邓武工地拆除与保护阶段延期**73天**，熊小梅工地水电阶段延期**54天**，美女工地竣工阶段延期**49天**，均属重大异常。
+
+督办李洁（超级队长）在本周内完成邓武、美女工地的拆除与保护及竣工收尾，务必推进至下阶段，避免交付节点继续滞后。
+
+督办马圣（超级队长）在本周内完成熊小梅工地水电施工及验收，限时整改，确保水电节点不再拖延。
+
+督办舒翔、刘晨晨（交付负责人）每日跟进所有延期超过20天工地进度，确保专项整改措施落地，防止后续交付风险进一步扩大。
+
+---
+
+### 收款管理督办指令
+
+当前超期收款金额高度集中，祝先生超期金额高达**203,583.25元**，杨培华、谌先生、倪佳等客户单笔超期均超5万元，形成重大资金风险。
+
+督办王宜丰（销售人员）在本周内完成祝先生超期收款跟进，务必补充收款进度及沟通记录，确保资金回笼。
+
+督办杨培华（销售人员）在本周内完成杨培华、杨测试等客户超期收款任务，涉及金额**80,209.13元**及**7,390.38元**，限时整改，补充所有沟通记录。
+
+督办舒翔、刘晨晨（交付负责人）立即补充宋树宝、孙顺良、杜姝等客户的收款进度及工程节点沟通，涉及金额合计超**145,000元**，防止工程收款断档。
+
+督办相关销售负责人补充测试、李春梅等客户的收款责任人及进度，完善数据闭环，确保风险可控。
+
+---
+
+**以上督办任务需高度重视，所有责任人必须在本周内完成整改，未完成将直接影响交付节点和公司资金安全。**"></div>
+            </div>
+            
+            
+            
+            <div class="module-section">
+                <div class="module-header">
+                    工期管理
+                </div>
+                <div class="module-content">
+                    
+                    <div style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">在施工延期分析</h4>
+
+                        
+                        <div class="key-metrics" style="background: #f0f8ff; border-left: 4px solid #2196F3; padding: 12px; margin: 15px 0;">
+                            <h5 style="margin: 0 0 8px 0; color: #1976D2;">🔍 异常洞察</h5>
+                            <div class="markdown-content" data-markdown="**问题1：多单品焕新工地延期严重，部分工地延期超30天，拆除与保护阶段进展缓慢**  
+数据概览：  
+- 周女士（延期**31天**，拆除与保护）  
+- 邓武（延期**73天**，拆除与保护）  
+- 李先生（延期**42天**，拆除与保护）  
+- 沈姐（延期**35天**，拆除与保护）
+
+解决方案：督办【超级队长】李应求、李洁、张杰、韩东方，分别完成【周女士、邓武、李先生、沈姐】工地的拆除与保护阶段施工进度，务必本周内推进至下阶段。
+
+| 客户姓名 | 超级队长 | 延期天数 | 当前施工阶段 |
+| -------- | -------- | -------- | ------------ |
+| **周女士** | 李应求   | **31**   | 拆除与保护   |
+| **邓武**   | 李洁     | **73**   | 拆除与保护   |
+| **李先生** | 张杰     | **42**   | 拆除与保护   |
+| **沈姐**   | 韩东方   | **35**   | 拆除与保护   |
+
+---
+
+**问题2：全屋装修工地延期普遍超20天，水电及中期阶段滞后**  
+数据概览：  
+- 林鹏禹（延期**30天**，中期）  
+- 熊小梅（延期**54天**，水电）  
+- 罗君慧（延期**27天**，水电）
+
+解决方案：督办【超级队长】郑祖海、马圣、王加雄，分别完成【林鹏禹、熊小梅、罗君慧】工地的中期及水电施工，重点关注水电节点，限期一周内完成验收。
+
+| 客户姓名 | 超级队长 | 延期天数 | 当前施工阶段 |
+| -------- | -------- | -------- | ------------ |
+| **林鹏禹** | 郑祖海   | **30**   | 中期         |
+| **熊小梅** | 马圣     | **54**   | 水电         |
+| **罗君慧** | 王加雄   | **27**   | 水电         |
+
+---
+
+**问题3：部分工地竣工阶段仍有较大延期，影响交付节点**  
+数据概览：  
+- 杨橹（延期**21天**，竣工）  
+- 美女（延期**49天**，竣工）
+
+解决方案：督办【超级队长】倪文兵、李洁，分别完成【杨橹、美女】工地的竣工收尾，督促本周完成所有竣工验收及交付准备。
+
+| 客户姓名 | 超级队长 | 延期天数 | 当前施工阶段 |
+| -------- | -------- | -------- | ------------ |
+| **杨橹**   | 倪文兵   | **21**   | 竣工         |
+| **美女**   | 李洁     | **49**   | 竣工         |
+
+---
+
+**问题4：其他单品焕新及局部装修工地延期20天以上，拆除与保护阶段进度需加快**  
+数据概览：  
+- 李莉（延期**23天**，拆除与保护）  
+- 李小鹏（延期**23天**，拆除与保护）  
+- 张先生（延期**21天**，拆除与保护）  
+- 胡艳琴（延期**21天**，拆除与保护）  
+- 韩东方（延期**30天**，其他）
+
+解决方案：督办【超级队长】周传武、王加雄、陈智、郑祖海、韩东方，分别完成【李莉、李小鹏、张先生、胡艳琴、赵军】工地的拆除与保护及其他阶段施工，要求每日跟进进度，确保下周有明显推进。
+
+| 客户姓名 | 超级队长 | 延期天数 | 当前施工阶段 |
+| -------- | -------- | -------- | ------------ |
+| **李莉**   | 周传武   | **23**   | 拆除与保护   |
+| **李小鹏** | 王加雄   | **23**   | 拆除与保护   |
+| **张先生** | 陈智     | **21**   | 拆除与保护   |
+| **胡艳琴** | 郑祖海   | **21**   | 拆除与保护   |
+| **赵军**   | 韩东方   | **30**   | 其他         |
+
+---
+
+**整体建议：**  
+督促所有超级队长对延期超过20天的工地进行专项整改，交付管理负责人舒翔、刘晨晨需每日跟进施工进度，确保所有工地按计划推进，避免后续交付风险。"></div>
+                        </div>
+                        
+
+                        
+                        <div style="margin: 15px 0;">
+                            <h5 style="margin: 0 0 10px 0; color: #333;">📊 数据详情</h5>
+                            
+                            
+                            <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        
+                                        <th>订单号</th>
+                                        
+                                        <th>客户姓名</th>
+                                        
+                                        <th>合同开工日期</th>
+                                        
+                                        <th>合同完工日期</th>
+                                        
+                                        <th>合同类型</th>
+                                        
+                                        <th>交付管理</th>
+                                        
+                                        <th>交付管理userid</th>
+                                        
+                                        <th>超级队长姓名</th>
+                                        
+                                        <th>交付管理企业微信ID</th>
+                                        
+                                        <th>实际开工日期</th>
+                                        
+                                        <th>合同工期</th>
+                                        
+                                        <th>实际工期</th>
+                                        
+                                        <th>延期天数</th>
+                                        
+                                        <th>当前施工阶段</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250621559076263164362752</td>
+                                        
+                                        <td>周女士</td>
+                                        
+                                        <td>2025-06-24 16:00:00+00:00</td>
+                                        
+                                        <td>2025-07-04 16:00:00+00:00</td>
+                                        
+                                        <td>单品焕新</td>
+                                        
+                                        <td>舒翔</td>
+                                        
+                                        <td>19,603,005.00</td>
+                                        
+                                        <td>李应求</td>
+                                        
+                                        <td>00775775</td>
+                                        
+                                        <td>2025-06-23 13:44:19</td>
+                                        
+                                        <td>10.00</td>
+                                        
+                                        <td>41.00</td>
+                                        
+                                        <td>31.00</td>
+                                        
+                                        <td>拆除与保护</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250305519978403064070144</td>
+                                        
+                                        <td>胡艳琴</td>
+                                        
+                                        <td>2025-04-29 16:00:00+00:00</td>
+                                        
+                                        <td>2025-08-10 16:00:00+00:00</td>
+                                        
+                                        <td>全屋装修</td>
+                                        
+                                        <td>舒翔</td>
+                                        
+                                        <td>19,603,005.00</td>
+                                        
+                                        <td>郑祖海</td>
+                                        
+                                        <td>00775775</td>
+                                        
+                                        <td>2025-04-09 09:57:22</td>
+                                        
+                                        <td>70.00</td>
+                                        
+                                        <td>91.00</td>
+                                        
+                                        <td>21.00</td>
+                                        
+                                        <td>拆除与保护</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250222515941973044133888</td>
+                                        
+                                        <td>林鹏禹</td>
+                                        
+                                        <td>2025-03-09 16:00:00+00:00</td>
+                                        
+                                        <td>2025-06-19 16:00:00+00:00</td>
+                                        
+                                        <td>全屋装修</td>
+                                        
+                                        <td>舒翔</td>
+                                        
+                                        <td>19,603,005.00</td>
+                                        
+                                        <td>郑祖海</td>
+                                        
+                                        <td>00775775</td>
+                                        
+                                        <td>2025-04-02 09:40:26</td>
+                                        
+                                        <td>65.00</td>
+                                        
+                                        <td>95.00</td>
+                                        
+                                        <td>30.00</td>
+                                        
+                                        <td>中期</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250322525984710091018240</td>
+                                        
+                                        <td>杨橹</td>
+                                        
+                                        <td>2025-05-04 16:00:00+00:00</td>
+                                        
+                                        <td>2025-08-11 16:00:00+00:00</td>
+                                        
+                                        <td>局部装修</td>
+                                        
+                                        <td>舒翔</td>
+                                        
+                                        <td>19,603,005.00</td>
+                                        
+                                        <td>倪文兵</td>
+                                        
+                                        <td>00775775</td>
+                                        
+                                        <td>2025-04-09 10:08:38</td>
+                                        
+                                        <td>70.00</td>
+                                        
+                                        <td>91.00</td>
+                                        
+                                        <td>21.00</td>
+                                        
+                                        <td>竣工</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250411533320715596894208</td>
+                                        
+                                        <td>熊小梅</td>
+                                        
+                                        <td>2025-05-12 16:00:00+00:00</td>
+                                        
+                                        <td>2025-08-14 16:00:00+00:00</td>
+                                        
+                                        <td>全屋装修</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>107,900,389.00</td>
+                                        
+                                        <td>马圣</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>2025-05-28 17:14:10</td>
+                                        
+                                        <td>4.00</td>
+                                        
+                                        <td>58.00</td>
+                                        
+                                        <td>54.00</td>
+                                        
+                                        <td>水电</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250317524336185351581696</td>
+                                        
+                                        <td>邓武</td>
+                                        
+                                        <td>2025-04-15 16:00:00+00:00</td>
+                                        
+                                        <td>2025-05-05 16:00:00+00:00</td>
+                                        
+                                        <td>单品焕新</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>107,900,389.00</td>
+                                        
+                                        <td>李洁</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>2025-04-13 15:25:07</td>
+                                        
+                                        <td>15.00</td>
+                                        
+                                        <td>88.00</td>
+                                        
+                                        <td>73.00</td>
+                                        
+                                        <td>拆除与保护</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250501540446725555499008</td>
+                                        
+                                        <td>李莉</td>
+                                        
+                                        <td>2025-05-12 16:00:00+00:00</td>
+                                        
+                                        <td>2025-06-15 16:00:00+00:00</td>
+                                        
+                                        <td>单品焕新</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>107,900,389.00</td>
+                                        
+                                        <td>周传武</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>2025-05-28 17:59:43</td>
+                                        
+                                        <td>35.00</td>
+                                        
+                                        <td>58.00</td>
+                                        
+                                        <td>23.00</td>
+                                        
+                                        <td>拆除与保护</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250520547467936034709504</td>
+                                        
+                                        <td>美女</td>
+                                        
+                                        <td>2025-05-21 16:00:00+00:00</td>
+                                        
+                                        <td>2025-05-29 16:00:00+00:00</td>
+                                        
+                                        <td>单品焕新</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>107,900,389.00</td>
+                                        
+                                        <td>李洁</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>2025-05-30 17:22:04</td>
+                                        
+                                        <td>7.00</td>
+                                        
+                                        <td>56.00</td>
+                                        
+                                        <td>49.00</td>
+                                        
+                                        <td>竣工</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250502540997971030982656</td>
+                                        
+                                        <td>李小鹏</td>
+                                        
+                                        <td>2025-06-29 16:00:00+00:00</td>
+                                        
+                                        <td>2025-07-31 16:00:00+00:00</td>
+                                        
+                                        <td>单品焕新</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>107,900,389.00</td>
+                                        
+                                        <td>王加雄</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>2025-06-12 16:49:03</td>
+                                        
+                                        <td>25.00</td>
+                                        
+                                        <td>48.00</td>
+                                        
+                                        <td>23.00</td>
+                                        
+                                        <td>拆除与保护</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250505542013259595784192</td>
+                                        
+                                        <td>张先生</td>
+                                        
+                                        <td>2025-05-21 16:00:00+00:00</td>
+                                        
+                                        <td>2025-07-13 16:00:00+00:00</td>
+                                        
+                                        <td>单品焕新</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>107,900,389.00</td>
+                                        
+                                        <td>陈智</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>2025-05-30 11:57:01</td>
+                                        
+                                        <td>35.00</td>
+                                        
+                                        <td>56.00</td>
+                                        
+                                        <td>21.00</td>
+                                        
+                                        <td>拆除与保护</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250322526056712520798208</td>
+                                        
+                                        <td>罗君慧</td>
+                                        
+                                        <td>2025-04-29 16:00:00+00:00</td>
+                                        
+                                        <td>2025-08-03 16:00:00+00:00</td>
+                                        
+                                        <td>全屋装修</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>107,900,389.00</td>
+                                        
+                                        <td>王加雄</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>2025-04-08 11:12:39</td>
+                                        
+                                        <td>65.00</td>
+                                        
+                                        <td>92.00</td>
+                                        
+                                        <td>27.00</td>
+                                        
+                                        <td>水电</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250518546787835785764864</td>
+                                        
+                                        <td>赵军</td>
+                                        
+                                        <td>2025-08-04 16:00:00+00:00</td>
+                                        
+                                        <td>2025-09-17 16:00:00+00:00</td>
+                                        
+                                        <td>单品焕新</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>107,900,389.00</td>
+                                        
+                                        <td>韩东方</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>2025-05-24 13:31:37</td>
+                                        
+                                        <td>30.00</td>
+                                        
+                                        <td>60.00</td>
+                                        
+                                        <td>30.00</td>
+                                        
+                                        <td>其他</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250417535550062890237952</td>
+                                        
+                                        <td>李先生</td>
+                                        
+                                        <td>2025-04-29 16:00:00+00:00</td>
+                                        
+                                        <td>2025-05-26 16:00:00+00:00</td>
+                                        
+                                        <td>单品焕新</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>107,900,389.00</td>
+                                        
+                                        <td>张杰</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>2025-05-22 11:37:44</td>
+                                        
+                                        <td>20.00</td>
+                                        
+                                        <td>62.00</td>
+                                        
+                                        <td>42.00</td>
+                                        
+                                        <td>拆除与保护</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250528550370973858336768</td>
+                                        
+                                        <td>沈姐</td>
+                                        
+                                        <td>2025-06-01 16:00:00+00:00</td>
+                                        
+                                        <td>2025-06-19 16:00:00+00:00</td>
+                                        
+                                        <td>单品焕新</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>107,900,389.00</td>
+                                        
+                                        <td>韩东方</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>2025-06-10 20:05:32</td>
+                                        
+                                        <td>15.00</td>
+                                        
+                                        <td>50.00</td>
+                                        
+                                        <td>35.00</td>
+                                        
+                                        <td>拆除与保护</td>
+                                        
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                            </div>
+                            
+                        </div>
+                        
+
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="module-section">
+                <div class="module-header">
+                    收款管理
+                </div>
+                <div class="module-content">
+                    
+                    <div style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">超期收款分析</h4>
+
+                        
+                        <div class="key-metrics" style="background: #f0f8ff; border-left: 4px solid #2196F3; padding: 12px; margin: 15px 0;">
+                            <h5 style="margin: 0 0 8px 0; color: #1976D2;">🔍 异常洞察</h5>
+                            <div class="markdown-content" data-markdown="**问题1：超期收款金额集中，个别客户超期金额极高，风险突出**  
+部分客户超期金额远超平均水平，尤其是**祝先生（203,583.25元）**、**杨培华（80,209.13元）**、**谌先生（70,979.27元）**、**倪佳（74,131.30元）**等，单笔超期金额均超过5万元，形成重大资金风险。多数责任人为销售人员，且未见有效跟进记录。
+
+解决方案：督办【销售人员】王宜丰、杨培华、晏文、张海云，分别完成【祝先生、杨培华、谌先生、倪佳】的超期收款跟进，务必在本周内补充收款进度及沟通记录。
+
+| 客户姓名 | 超期金额（元） | 销售姓名 | 当前待收款期数 | 最近一次提交任务时间 | 超期原因_外部 | 超期原因_内部 |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **祝先生** | **203,583.25** | 王宜丰 | 1 | 无 | 无 | 无 |
+| **杨培华** | **80,209.13** | 杨培华 | 1 | 无 | 无 | 无 |
+| **谌先生** | **70,979.27** | 晏文 | 1 | 无 | 无 | 无 |
+| **倪佳** | **74,131.30** | 张海云 | 1 | 无 | 无 | 无 |
+
+---
+
+**问题2：部分销售人员多单超期，收款管理薄弱**  
+裴静路、曾慧雯、陈华超等销售人员名下多笔订单超期，且部分客户如**殷梅**、**陈春枚**、**余芳芳**等，累计超期金额较高，显示收款管理存在系统性问题。
+
+解决方案：督办【销售人员】裴静路、曾慧雯、陈华超，针对名下所有超期客户（如殷梅、陈春枚、余芳芳等），逐一补充收款进度及沟通记录，限时整改。
+
+| 销售姓名 | 客户姓名 | 超期金额（元） | 当前待收款期数 |
+|:---:|:---:|:---:|:---:|
+| 裴静路 | 殷梅 | 19,998.00/66,367.84 | 1 |
+| 陈华超 | 陈春枚 | 60,958.03/65,039.86 | 1 |
+| 曾慧雯 | 赵勇/罗洁 | 39,208.50/13,581.11 | 1 |
+
+---
+
+**问题3：工程交付负责人节点收款超期，部分未及时跟进**  
+工程交付负责人舒翔、刘晨晨名下多笔订单超期，部分客户如**宋树宝（38,060.80元）**、**杜姝（15,678.64元）**、**孙顺良（91,622.83元）**等，已超期且有未及时提交任务记录，存在工程收款断档风险。
+
+解决方案：督办【交付负责人】舒翔、刘晨晨，针对名下所有超期客户（如宋树宝、杜姝、孙顺良等），立即补充收款进度及工程节点沟通记录。
+
+| 交付负责人 | 客户姓名 | 超期金额（元） | 当前待收款期数 | 最近一次提交任务时间 |
+|:---:|:---:|:---:|:---:|:---:|
+| 舒翔 | 宋树宝 | 38,060.80 | 2 | 无 |
+| 刘晨晨 | 孙顺良 | **91,622.83** | 1 | 2025-06-11 |
+| 刘晨晨 | 杜姝 | 15,678.64 | 1 | 无 |
+
+---
+
+**问题4：部分客户多期超期，未见有效跟进**  
+如**符小姐（17,022.58元，2期）**、**杨橹（8,868.58元，2期）**等客户，存在多期超期，且未见有效跟进记录，显示收款流程断层。
+
+解决方案：督办【交付负责人】舒翔，针对符小姐、杨橹等多期超期客户，补充每期收款进度及沟通记录，限时整改。
+
+| 客户姓名 | 超期金额（元） | 当前待收款期数 | 交付负责人 | 最近一次提交任务时间 |
+|:---:|:---:|:---:|:---:|:---:|
+| 符小姐 | 17,022.58 | 2 | 舒翔 | 无 |
+| 杨橹 | 8,868.58 | 2 | 舒翔 | 2025-06-11 |
+
+---
+
+**问题5：部分订单长期无跟进记录，收款责任人信息缺失**  
+如**测试、李春梅、杨测试**等客户，超期金额虽小，但长期无收款责任人及跟进记录，影响整体数据质量及风险管控。
+
+解决方案：督办【销售负责人】相关人员，补充上述客户的收款责任人及收款进度，完善数据闭环。
+
+| 客户姓名 | 超期金额（元） | 销售姓名 | 收款责任人姓名 | 最近一次提交任务时间 |
+|:---:|:---:|:---:|:---:|:---:|
+| 测试 | 7,499.00 | 无 | 无 | 无 |
+| 李春梅 | 443.57 | 无 | 无 | 无 |
+| 杨测试 | 7,390.38 | 杨培华 | 杨培华 | 无 |
+
+---
+
+**结论**  
+当前超期收款主要集中在销售人员责任期，部分工程节点收款也存在断档。建议重点督办超期金额较大的客户，要求销售及交付负责人限时补充收款进度及沟通记录，形成闭环管理。对于责任人信息缺失的订单，需及时完善，确保风险可控。"></div>
+                        </div>
+                        
+
+                        
+                        <div style="margin: 15px 0;">
+                            <h5 style="margin: 0 0 10px 0; color: #333;">📊 数据详情</h5>
+                            
+                            
+                            <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        
+                                        <th>订单编码</th>
+                                        
+                                        <th>客户姓名</th>
+                                        
+                                        <th>超30天以上未回款金额</th>
+                                        
+                                        <th>交付管理</th>
+                                        
+                                        <th>超级队长姓名</th>
+                                        
+                                        <th>销售姓名</th>
+                                        
+                                        <th>销售企业微信ID</th>
+                                        
+                                        <th>交付管理企业微信ID</th>
+                                        
+                                        <th>当前待收款期数</th>
+                                        
+                                        <th>收款责任人企业微信id</th>
+                                        
+                                        <th>收款责任人姓名</th>
+                                        
+                                        <th>最近一次提交任务时间</th>
+                                        
+                                        <th>超期原因_外部原因_最新</th>
+                                        
+                                        <th>超期原因_内部原因_最新</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250212512377170069512192</td>
+                                        
+                                        <td>测试</td>
+                                        
+                                        <td>7,499.00</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250613556166030871969792</td>
+                                        
+                                        <td>殷梅</td>
+                                        
+                                        <td>1,998.00</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>裴静路</td>
+                                        
+                                        <td>01167429</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>01167429</td>
+                                        
+                                        <td>裴静路</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250322525958027631845376</td>
+                                        
+                                        <td>祝先生</td>
+                                        
+                                        <td>203,583.25</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>王宜丰</td>
+                                        
+                                        <td>05082861</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05082861</td>
+                                        
+                                        <td>王宜丰</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250705564186391781773312</td>
+                                        
+                                        <td>倪佳</td>
+                                        
+                                        <td>74,131.30</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>张海云</td>
+                                        
+                                        <td>05200211</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05200211</td>
+                                        
+                                        <td>张海云</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250421536899614268399616</td>
+                                        
+                                        <td>刘娜</td>
+                                        
+                                        <td>43,364.38</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>刘娜</td>
+                                        
+                                        <td>liun29</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>liun29</td>
+                                        
+                                        <td>刘娜</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250408532206760602345472</td>
+                                        
+                                        <td>吕先生</td>
+                                        
+                                        <td>18,223.41</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>何孝妹</td>
+                                        
+                                        <td>01162244</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>01162244</td>
+                                        
+                                        <td>何孝妹</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250322526076928663412736</td>
+                                        
+                                        <td>谌先生</td>
+                                        
+                                        <td>70,979.27</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>晏文</td>
+                                        
+                                        <td>00765655</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>00765655</td>
+                                        
+                                        <td>晏文</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250412533622372780105728</td>
+                                        
+                                        <td>徐苗苗</td>
+                                        
+                                        <td>29,141.64</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>尹邵丰</td>
+                                        
+                                        <td>01180231</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>01180231</td>
+                                        
+                                        <td>尹邵丰</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250524548930110007439360</td>
+                                        
+                                        <td>陈先生</td>
+                                        
+                                        <td>1,998.00</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>裴静路</td>
+                                        
+                                        <td>01167429</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>01167429</td>
+                                        
+                                        <td>裴静路</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250508543194938003886080</td>
+                                        
+                                        <td>杨培华</td>
+                                        
+                                        <td>80,209.13</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>杨培华</td>
+                                        
+                                        <td>00693453</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>00693453</td>
+                                        
+                                        <td>杨培华</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250426538751581617897472</td>
+                                        
+                                        <td>翟姐</td>
+                                        
+                                        <td>3,999.00</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>王伟远</td>
+                                        
+                                        <td>05137378</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05137378</td>
+                                        
+                                        <td>王伟远</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250417535457087220789248</td>
+                                        
+                                        <td>杨先生</td>
+                                        
+                                        <td>17,327.00</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>裴静路</td>
+                                        
+                                        <td>01167429</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>01167429</td>
+                                        
+                                        <td>裴静路</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250426538845754220064768</td>
+                                        
+                                        <td>田辉</td>
+                                        
+                                        <td>27,814.46</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>吕乐乐</td>
+                                        
+                                        <td>01086934</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>01086934</td>
+                                        
+                                        <td>吕乐乐</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250419536162864445206528</td>
+                                        
+                                        <td>余芳芳</td>
+                                        
+                                        <td>21,186.93</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>陈凯</td>
+                                        
+                                        <td>00785911</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>00785911</td>
+                                        
+                                        <td>陈凯</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250331529424741875023872</td>
+                                        
+                                        <td>李春梅</td>
+                                        
+                                        <td>0.62</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250331529425156364533760</td>
+                                        
+                                        <td>李春梅</td>
+                                        
+                                        <td>443.57</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250607553911753206132736</td>
+                                        
+                                        <td>孙小明</td>
+                                        
+                                        <td>1,136.38</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>裴静路</td>
+                                        
+                                        <td>01167429</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>01167429</td>
+                                        
+                                        <td>裴静路</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250306520246332418564096</td>
+                                        
+                                        <td>薛晓梅</td>
+                                        
+                                        <td>3,884.50</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>王凯</td>
+                                        
+                                        <td>05102554</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05102554</td>
+                                        
+                                        <td>王凯</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250526549590150028623872</td>
+                                        
+                                        <td>张智杰</td>
+                                        
+                                        <td>36,049.11</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>赵建</td>
+                                        
+                                        <td>01025244</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>01025244</td>
+                                        
+                                        <td>赵建</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250429539836045294964736</td>
+                                        
+                                        <td>沈萍</td>
+                                        
+                                        <td>26,171.64</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>陈华超</td>
+                                        
+                                        <td>05153717</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05153717</td>
+                                        
+                                        <td>陈华超</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250405531179195427172352</td>
+                                        
+                                        <td>杨测试</td>
+                                        
+                                        <td>7,390.38</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>杨培华</td>
+                                        
+                                        <td>00693453</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>00693453</td>
+                                        
+                                        <td>杨培华</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250623559750312194457600</td>
+                                        
+                                        <td>殷梅</td>
+                                        
+                                        <td>66,367.84</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>裴静路</td>
+                                        
+                                        <td>01167429</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>01167429</td>
+                                        
+                                        <td>裴静路</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250304519654637448716288</td>
+                                        
+                                        <td>测试</td>
+                                        
+                                        <td>0.34</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250621559022786056765440</td>
+                                        
+                                        <td>刘先生</td>
+                                        
+                                        <td>30,904.06</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>裴静路</td>
+                                        
+                                        <td>01167429</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>01167429</td>
+                                        
+                                        <td>裴静路</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250328528242561761107968</td>
+                                        
+                                        <td>手机用户9986</td>
+                                        
+                                        <td>2,725.28</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>秦琰</td>
+                                        
+                                        <td>05145514</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05145514</td>
+                                        
+                                        <td>秦琰</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250516545958716252491776</td>
+                                        
+                                        <td>崔女士</td>
+                                        
+                                        <td>47,066.10</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>秦琰</td>
+                                        
+                                        <td>05145514</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05145514</td>
+                                        
+                                        <td>秦琰</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250524548818584680435712</td>
+                                        
+                                        <td>吴春香</td>
+                                        
+                                        <td>6.50</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>刘嘉</td>
+                                        
+                                        <td>05173107</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05173107</td>
+                                        
+                                        <td>刘嘉</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250602552149104504029184</td>
+                                        
+                                        <td>陈春枚</td>
+                                        
+                                        <td>60,958.03</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>陈华超</td>
+                                        
+                                        <td>05153717</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05153717</td>
+                                        
+                                        <td>陈华超</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250222515932921140506624</td>
+                                        
+                                        <td>张先生</td>
+                                        
+                                        <td>45,041.84</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>马雷</td>
+                                        
+                                        <td>01099124</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>01099124</td>
+                                        
+                                        <td>马雷</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250708565156557395017728</td>
+                                        
+                                        <td>邹蓉</td>
+                                        
+                                        <td>12,096.00</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>陈有朋</td>
+                                        
+                                        <td>05199259</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05199259</td>
+                                        
+                                        <td>陈有朋</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250621559011080408616960</td>
+                                        
+                                        <td>符小姐</td>
+                                        
+                                        <td>17,022.58</td>
+                                        
+                                        <td>舒翔</td>
+                                        
+                                        <td>胡祥柳</td>
+                                        
+                                        <td>林晓楠</td>
+                                        
+                                        <td>05168007</td>
+                                        
+                                        <td>00775775</td>
+                                        
+                                        <td>2.00</td>
+                                        
+                                        <td>00775775</td>
+                                        
+                                        <td>舒翔</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250322525984710091018240</td>
+                                        
+                                        <td>杨橹</td>
+                                        
+                                        <td>8,868.58</td>
+                                        
+                                        <td>舒翔</td>
+                                        
+                                        <td>倪文兵</td>
+                                        
+                                        <td>曾慧雯</td>
+                                        
+                                        <td>05062192</td>
+                                        
+                                        <td>00775775</td>
+                                        
+                                        <td>2.00</td>
+                                        
+                                        <td>00775775</td>
+                                        
+                                        <td>舒翔</td>
+                                        
+                                        <td>2025-06-11 09:37:56</td>
+                                        
+                                        <td>["其他"]</td>
+                                        
+                                        <td>[]</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250510543917096338411520</td>
+                                        
+                                        <td>赵宁</td>
+                                        
+                                        <td>38,060.80</td>
+                                        
+                                        <td>舒翔</td>
+                                        
+                                        <td>宋树宝</td>
+                                        
+                                        <td>刘洋</td>
+                                        
+                                        <td>liuy418</td>
+                                        
+                                        <td>00775775</td>
+                                        
+                                        <td>2.00</td>
+                                        
+                                        <td>00775775</td>
+                                        
+                                        <td>舒翔</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250525549200784169009152</td>
+                                        
+                                        <td>赵勇</td>
+                                        
+                                        <td>39,208.50</td>
+                                        
+                                        <td>舒翔</td>
+                                        
+                                        <td>洪有志</td>
+                                        
+                                        <td>曾慧雯</td>
+                                        
+                                        <td>05062192</td>
+                                        
+                                        <td>00775775</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05062192</td>
+                                        
+                                        <td>曾慧雯</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250320525358138401107968</td>
+                                        
+                                        <td>李永强</td>
+                                        
+                                        <td>18,474.81</td>
+                                        
+                                        <td>舒翔</td>
+                                        
+                                        <td>倪文兵</td>
+                                        
+                                        <td>韩笑</td>
+                                        
+                                        <td>01113731</td>
+                                        
+                                        <td>00775775</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>01113731</td>
+                                        
+                                        <td>韩笑</td>
+                                        
+                                        <td>2025-06-11 09:39:25</td>
+                                        
+                                        <td>["其他"]</td>
+                                        
+                                        <td>["其他"]</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250705564208872689172480</td>
+                                        
+                                        <td>陈昊</td>
+                                        
+                                        <td>942.56</td>
+                                        
+                                        <td>舒翔</td>
+                                        
+                                        <td>倪文兵</td>
+                                        
+                                        <td>张海云</td>
+                                        
+                                        <td>05200211</td>
+                                        
+                                        <td>00775775</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05200211</td>
+                                        
+                                        <td>张海云</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250525549159751284584448</td>
+                                        
+                                        <td>罗洁</td>
+                                        
+                                        <td>13,581.11</td>
+                                        
+                                        <td>舒翔</td>
+                                        
+                                        <td>郑祖海</td>
+                                        
+                                        <td>曾慧雯</td>
+                                        
+                                        <td>05062192</td>
+                                        
+                                        <td>00775775</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05062192</td>
+                                        
+                                        <td>曾慧雯</td>
+                                        
+                                        <td>2025-06-11 09:30:58</td>
+                                        
+                                        <td>["其他"]</td>
+                                        
+                                        <td>[]</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250518546706131804884992</td>
+                                        
+                                        <td>陈春枚</td>
+                                        
+                                        <td>65,039.86</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>陈华超</td>
+                                        
+                                        <td>05153717</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05153717</td>
+                                        
+                                        <td>陈华超</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250316523920871933583360</td>
+                                        
+                                        <td>林先生</td>
+                                        
+                                        <td>37,536.64</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>何宇</td>
+                                        
+                                        <td>05138309</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05138309</td>
+                                        
+                                        <td>何宇</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250322526141798935101440</td>
+                                        
+                                        <td>林女士</td>
+                                        
+                                        <td>91,417.64</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>晏文</td>
+                                        
+                                        <td>00765655</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>00765655</td>
+                                        
+                                        <td>晏文</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250407531868633631281152</td>
+                                        
+                                        <td>贾蕾</td>
+                                        
+                                        <td>51,960.00</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>刘洋</td>
+                                        
+                                        <td>liuy418</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>liuy418</td>
+                                        
+                                        <td>刘洋</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250508543157545540435968</td>
+                                        
+                                        <td>莫女士</td>
+                                        
+                                        <td>3,187.39</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>杨成允</td>
+                                        
+                                        <td>05031166</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05031166</td>
+                                        
+                                        <td>杨成允</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250327527905931963604992</td>
+                                        
+                                        <td>杜先生</td>
+                                        
+                                        <td>36,297.37</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>杨成允</td>
+                                        
+                                        <td>05031166</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05031166</td>
+                                        
+                                        <td>杨成允</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250704563695059485265920</td>
+                                        
+                                        <td>邓曼娜</td>
+                                        
+                                        <td>8,687.05</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>钟伟腾</td>
+                                        
+                                        <td>杨富</td>
+                                        
+                                        <td>01179303</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>01179303</td>
+                                        
+                                        <td>杨富</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250411533222005676347392</td>
+                                        
+                                        <td>孙顺良</td>
+                                        
+                                        <td>91,622.83</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>梅国胜</td>
+                                        
+                                        <td>唐翠丽</td>
+                                        
+                                        <td>05156572</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05156572</td>
+                                        
+                                        <td>唐翠丽</td>
+                                        
+                                        <td>2025-06-11 09:43:58</td>
+                                        
+                                        <td>[]</td>
+                                        
+                                        <td>["其他"]</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250630562361249388707840</td>
+                                        
+                                        <td>黄芩</td>
+                                        
+                                        <td>500.00</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>黄学松</td>
+                                        
+                                        <td>王伟远</td>
+                                        
+                                        <td>05137378</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05137378</td>
+                                        
+                                        <td>王伟远</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250528550370973858336768</td>
+                                        
+                                        <td>沈姐</td>
+                                        
+                                        <td>1,499.01</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>韩东方</td>
+                                        
+                                        <td>裴静路</td>
+                                        
+                                        <td>01167429</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>01167429</td>
+                                        
+                                        <td>裴静路</td>
+                                        
+                                        <td>2025-06-11 09:28:16</td>
+                                        
+                                        <td>["其他"]</td>
+                                        
+                                        <td>[]</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250707564813142715224064</td>
+                                        
+                                        <td>杜姝</td>
+                                        
+                                        <td>15,678.64</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>韩东方</td>
+                                        
+                                        <td>刘高吉</td>
+                                        
+                                        <td>05152682</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05152682</td>
+                                        
+                                        <td>刘高吉</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250701562692308835921920</td>
+                                        
+                                        <td>郭海萍</td>
+                                        
+                                        <td>28,163.42</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>蔡华安</td>
+                                        
+                                        <td>管蕲</td>
+                                        
+                                        <td>01029794</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>01029794</td>
+                                        
+                                        <td>管蕲</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250502540997971030982656</td>
+                                        
+                                        <td>李小鹏</td>
+                                        
+                                        <td>4,000.00</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>王加雄</td>
+                                        
+                                        <td>姚纯锐</td>
+                                        
+                                        <td>01175434</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>01175434</td>
+                                        
+                                        <td>姚纯锐</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                        <td>--</td>
+                                        
+                                    </tr>
+                                    
+                                    <tr>
+                                        
+                                        <td>4250505542013259595784192</td>
+                                        
+                                        <td>张先生</td>
+                                        
+                                        <td>3,997.67</td>
+                                        
+                                        <td>刘晨晨</td>
+                                        
+                                        <td>陈智</td>
+                                        
+                                        <td>朱波</td>
+                                        
+                                        <td>05036882</td>
+                                        
+                                        <td>05154753</td>
+                                        
+                                        <td>1.00</td>
+                                        
+                                        <td>05036882</td>
+                                        
+                                        <td>朱波</td>
+                                        
+                                        <td>2025-06-11 09:34:38</td>
+                                        
+                                        <td>["其他"]</td>
+                                        
+                                        <td>[]</td>
+                                        
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                            </div>
+                            
+                        </div>
+                        
+
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            
+            
+            <div class="todos-section">
+                <div class="todos-header">
+                    <h2>📋 AI生成执行人待办事项</h2>
+                    <div class="subtitle">基于数据分析结果，为各执行人生成具体可执行的待办事项</div>
+                </div>
+                <div class="todos-content">
+                    
+                    <div class="todos-summary">
+                        <h4>📊 待办事项概览</h4>
+                        <div class="summary-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">执行人数</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">18</div>
+                                <div class="stat-label">待办事项</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">高优先级</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    <div class="executor-card">
+                        <div class="executor-header">
+                            <div class="executor-info">
+                                <h3>舒翔</h3>
+                                <div class="role">交付管理</div>
+                            </div>
+                            <button class="supervise-btn" 
+                                    onclick="superviseTodos('00775775', '舒翔')">
+                                🚀 一键督办
+                            </button>
+                        </div>
+                        <div class="todo-list">
+                            
+                            <div class="todo-item priority-high">
+                                <div class="todo-title">
+                                    工期异常整改：拆除与保护阶段延期
+                                    <span class="priority-badge high">
+                                        高优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250621559076263164362752（客户：周女士），实际工期已超合同工期31天，当前处于拆除与保护阶段。需立即排查延期原因，制定加速施工计划，并于3天内提交整改方案。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-21</span>
+                                    <span>📂 施工管理</span>
+                                    
+                                    <span>🏗️ 周女士</span>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item priority-high">
+                                <div class="todo-title">
+                                    工期异常整改：拆除与保护阶段延期
+                                    <span class="priority-badge high">
+                                        高优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250305519978403064070144（客户：胡艳琴），实际工期已超合同工期21天，当前处于拆除与保护阶段。需核查施工进度，与超级队长郑祖海沟通加快进度，3天内提交进度恢复计划。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-21</span>
+                                    <span>📂 施工管理</span>
+                                    
+                                    <span>🏗️ 胡艳琴</span>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item priority-medium">
+                                <div class="todo-title">
+                                    工期异常整改：中期阶段延期
+                                    <span class="priority-badge medium">
+                                        中优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250222515941973044133888（客户：林鹏禹），实际工期已超合同工期30天，当前处于中期。需与超级队长郑祖海协作，梳理剩余工序，优化资源配置，5天内完成进度恢复方案。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-23</span>
+                                    <span>📂 施工管理</span>
+                                    
+                                    <span>🏗️ 林鹏禹</span>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item priority-medium">
+                                <div class="todo-title">
+                                    工期异常整改：竣工阶段延期
+                                    <span class="priority-badge medium">
+                                        中优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250322525984710091018240（客户：杨橹），实际工期已超合同工期21天，当前处于竣工阶段。需核查未完成事项，协调竣工验收，5天内完成竣工交付。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-23</span>
+                                    <span>📂 施工管理</span>
+                                    
+                                    <span>🏗️ 杨橹</span>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="executor-card">
+                        <div class="executor-header">
+                            <div class="executor-info">
+                                <h3>刘晨晨</h3>
+                                <div class="role">交付管理</div>
+                            </div>
+                            <button class="supervise-btn" 
+                                    onclick="superviseTodos('05154753', '刘晨晨')">
+                                🚀 一键督办
+                            </button>
+                        </div>
+                        <div class="todo-list">
+                            
+                            <div class="todo-item priority-high">
+                                <div class="todo-title">
+                                    工期异常整改：水电阶段严重延期
+                                    <span class="priority-badge high">
+                                        高优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250411533320715596894208（客户：熊小梅），实际工期已超合同工期54天，当前处于水电阶段。需立即组织施工队，排查进度瓶颈，2天内制定加速计划并跟进执行。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-20</span>
+                                    <span>📂 施工管理</span>
+                                    
+                                    <span>🏗️ 熊小梅</span>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item priority-high">
+                                <div class="todo-title">
+                                    工期异常整改：拆除与保护阶段严重延期
+                                    <span class="priority-badge high">
+                                        高优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250317524336185351581696（客户：邓武），实际工期已超合同工期73天，当前处于拆除与保护阶段。需紧急核查原因，安排专人跟进，3天内完成整改方案。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-21</span>
+                                    <span>📂 施工管理</span>
+                                    
+                                    <span>🏗️ 邓武</span>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item priority-medium">
+                                <div class="todo-title">
+                                    工期异常整改：拆除与保护阶段延期
+                                    <span class="priority-badge medium">
+                                        中优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250501540446725555499008（客户：李莉），实际工期已超合同工期23天，当前处于拆除与保护阶段。需与超级队长周传武沟通，优化施工安排，5天内恢复进度。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-23</span>
+                                    <span>📂 施工管理</span>
+                                    
+                                    <span>🏗️ 李莉</span>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item priority-medium">
+                                <div class="todo-title">
+                                    工期异常整改：竣工阶段严重延期
+                                    <span class="priority-badge medium">
+                                        中优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250520547467936034709504（客户：美女），实际工期已超合同工期49天，当前处于竣工阶段。需核查未完成事项，协调竣工验收，5天内完成竣工交付。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-23</span>
+                                    <span>📂 施工管理</span>
+                                    
+                                    <span>🏗️ 美女</span>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item priority-medium">
+                                <div class="todo-title">
+                                    工期异常整改：拆除与保护阶段延期
+                                    <span class="priority-badge medium">
+                                        中优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250502540997971030982656（客户：李小鹏），实际工期已超合同工期23天，当前处于拆除与保护阶段。需与超级队长王加雄沟通，优化施工安排，5天内恢复进度。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-23</span>
+                                    <span>📂 施工管理</span>
+                                    
+                                    <span>🏗️ 李小鹏</span>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="todo-item priority-medium">
+                                <div class="todo-title">
+                                    工期异常整改：拆除与保护阶段延期
+                                    <span class="priority-badge medium">
+                                        中优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250505542013259595784192（客户：张先生），实际工期已超合同工期21天，当前处于拆除与保护阶段。需与超级队长陈智沟通，优化施工安排，5天内恢复进度。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-23</span>
+                                    <span>📂 施工管理</span>
+                                    
+                                    <span>🏗️ 张先生</span>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="executor-card">
+                        <div class="executor-header">
+                            <div class="executor-info">
+                                <h3>裴静路</h3>
+                                <div class="role">销售</div>
+                            </div>
+                            <button class="supervise-btn" 
+                                    onclick="superviseTodos('01167429', '裴静路')">
+                                🚀 一键督办
+                            </button>
+                        </div>
+                        <div class="todo-list">
+                            
+                            <div class="todo-item priority-high">
+                                <div class="todo-title">
+                                    超期回款催收
+                                    <span class="priority-badge high">
+                                        高优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250613556166030871969792（客户：殷梅）与4250524548930110007439360（客户：陈先生），超30天未回款金额分别为1998元。需在3天内联系客户，确认回款计划并反馈结果。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-21</span>
+                                    <span>📂 收款管理</span>
+                                    
+                                    <span>🏗️ 殷梅, 陈先生</span>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="executor-card">
+                        <div class="executor-header">
+                            <div class="executor-info">
+                                <h3>王宜丰</h3>
+                                <div class="role">销售</div>
+                            </div>
+                            <button class="supervise-btn" 
+                                    onclick="superviseTodos('05082861', '王宜丰')">
+                                🚀 一键督办
+                            </button>
+                        </div>
+                        <div class="todo-list">
+                            
+                            <div class="todo-item priority-high">
+                                <div class="todo-title">
+                                    超期回款催收
+                                    <span class="priority-badge high">
+                                        高优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250322525958027631845376（客户：祝先生），超30天未回款金额203,583.25元。需在3天内联系客户，确认回款计划并反馈结果。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-21</span>
+                                    <span>📂 收款管理</span>
+                                    
+                                    <span>🏗️ 祝先生</span>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="executor-card">
+                        <div class="executor-header">
+                            <div class="executor-info">
+                                <h3>张海云</h3>
+                                <div class="role">销售</div>
+                            </div>
+                            <button class="supervise-btn" 
+                                    onclick="superviseTodos('05200211', '张海云')">
+                                🚀 一键督办
+                            </button>
+                        </div>
+                        <div class="todo-list">
+                            
+                            <div class="todo-item priority-high">
+                                <div class="todo-title">
+                                    超期回款催收
+                                    <span class="priority-badge high">
+                                        高优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250705564186391781773312（客户：倪佳），超30天未回款金额74,131.30元。需在3天内联系客户，确认回款计划并反馈结果。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-21</span>
+                                    <span>📂 收款管理</span>
+                                    
+                                    <span>🏗️ 倪佳</span>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="executor-card">
+                        <div class="executor-header">
+                            <div class="executor-info">
+                                <h3>何孝妹</h3>
+                                <div class="role">销售</div>
+                            </div>
+                            <button class="supervise-btn" 
+                                    onclick="superviseTodos('01162244', '何孝妹')">
+                                🚀 一键督办
+                            </button>
+                        </div>
+                        <div class="todo-list">
+                            
+                            <div class="todo-item priority-high">
+                                <div class="todo-title">
+                                    超期回款催收
+                                    <span class="priority-badge high">
+                                        高优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250408532206760602345472（客户：吕先生），超30天未回款金额18,223.41元。需在3天内联系客户，确认回款计划并反馈结果。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-21</span>
+                                    <span>📂 收款管理</span>
+                                    
+                                    <span>🏗️ 吕先生</span>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="executor-card">
+                        <div class="executor-header">
+                            <div class="executor-info">
+                                <h3>晏文</h3>
+                                <div class="role">销售</div>
+                            </div>
+                            <button class="supervise-btn" 
+                                    onclick="superviseTodos('00765655', '晏文')">
+                                🚀 一键督办
+                            </button>
+                        </div>
+                        <div class="todo-list">
+                            
+                            <div class="todo-item priority-high">
+                                <div class="todo-title">
+                                    超期回款催收
+                                    <span class="priority-badge high">
+                                        高优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250322526076928663412736（客户：谌先生），超30天未回款金额70,979.27元。需在3天内联系客户，确认回款计划并反馈结果。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-21</span>
+                                    <span>📂 收款管理</span>
+                                    
+                                    <span>🏗️ 谌先生</span>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="executor-card">
+                        <div class="executor-header">
+                            <div class="executor-info">
+                                <h3>尹邵丰</h3>
+                                <div class="role">销售</div>
+                            </div>
+                            <button class="supervise-btn" 
+                                    onclick="superviseTodos('01180231', '尹邵丰')">
+                                🚀 一键督办
+                            </button>
+                        </div>
+                        <div class="todo-list">
+                            
+                            <div class="todo-item priority-high">
+                                <div class="todo-title">
+                                    超期回款催收
+                                    <span class="priority-badge high">
+                                        高优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250412533622372780105728（客户：徐苗苗），超30天未回款金额29,141.64元。需在3天内联系客户，确认回款计划并反馈结果。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-21</span>
+                                    <span>📂 收款管理</span>
+                                    
+                                    <span>🏗️ 徐苗苗</span>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="executor-card">
+                        <div class="executor-header">
+                            <div class="executor-info">
+                                <h3>杨培华</h3>
+                                <div class="role">销售</div>
+                            </div>
+                            <button class="supervise-btn" 
+                                    onclick="superviseTodos('00693453', '杨培华')">
+                                🚀 一键督办
+                            </button>
+                        </div>
+                        <div class="todo-list">
+                            
+                            <div class="todo-item priority-high">
+                                <div class="todo-title">
+                                    超期回款催收
+                                    <span class="priority-badge high">
+                                        高优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250508543194938003886080（客户：杨培华），超30天未回款金额80,209.13元。需在3天内联系客户，确认回款计划并反馈结果。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-21</span>
+                                    <span>📂 收款管理</span>
+                                    
+                                    <span>🏗️ 杨培华</span>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="executor-card">
+                        <div class="executor-header">
+                            <div class="executor-info">
+                                <h3>刘娜</h3>
+                                <div class="role">销售</div>
+                            </div>
+                            <button class="supervise-btn" 
+                                    onclick="superviseTodos('liun29', '刘娜')">
+                                🚀 一键督办
+                            </button>
+                        </div>
+                        <div class="todo-list">
+                            
+                            <div class="todo-item priority-high">
+                                <div class="todo-title">
+                                    超期回款催收
+                                    <span class="priority-badge high">
+                                        高优先级
+                                    </span>
+                                </div>
+                                <div class="todo-description">针对订单4250421536899614268399616（客户：刘娜），超30天未回款金额43,364.38元。需在3天内联系客户，确认回款计划并反馈结果。</div>
+                                <div class="todo-meta">
+                                    <span>⏰ 2025-08-21</span>
+                                    <span>📂 收款管理</span>
+                                    
+                                    <span>🏗️ 刘娜</span>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="footer">
+            生成时间：2025-08-18 17:29:10 | AI自动日报推送系统
+        </div>
+    </div>
+    
+    <script>
+        // Markdown渲染功能
+        function renderMarkdown() {
+            console.log('开始渲染Markdown内容...');
+            const markdownElements = document.querySelectorAll('.markdown-content[data-markdown]');
+            console.log(`找到 ${markdownElements.length} 个Markdown元素`);
+            
+            markdownElements.forEach((element, index) => {
+                let markdownText = element.getAttribute('data-markdown');
+                console.log(`元素 ${index + 1} 的原始内容长度: ${markdownText ? markdownText.length : 0}`);
+                
+                if (markdownText && markdownText.trim()) {
+                    if (typeof marked !== 'undefined') {
+                        try {
+                            // 清理Markdown代码块标记
+                            markdownText = markdownText.trim();
+                            if (markdownText.startsWith('```markdown')) {
+                                markdownText = markdownText.substring(11).trim();
+                            }
+                            if (markdownText.startsWith('```')) {
+                                markdownText = markdownText.substring(3).trim();
+                            }
+                            if (markdownText.endsWith('```')) {
+                                markdownText = markdownText.substring(0, markdownText.length - 3).trim();
+                            }
+                            
+                            const htmlContent = marked.parse(markdownText);
+                            element.innerHTML = htmlContent;
+                            
+                            // 为表格添加滚动容器
+                            const tables = element.querySelectorAll('table');
+                            tables.forEach(table => {
+                                if (!table.closest('.table-container')) {
+                                    const container = document.createElement('div');
+                                    container.className = 'table-container';
+                                    table.parentNode.insertBefore(container, table);
+                                    container.appendChild(table);
+                                }
+                            });
+                            
+                            console.log(`元素 ${index + 1} Markdown渲染成功，处理了 ${tables.length} 个表格`);
+                        } catch (error) {
+                            console.warn(`元素 ${index + 1} Markdown渲染失败:`, error);
+                            // 如果渲染失败，显示清理后的文本，保持换行
+                            element.innerHTML = markdownText.replace(/\n/g, '<br>');
+                        }
+                    } else {
+                        console.warn('marked库未加载，使用简单格式化');
+                        // 如果marked库未加载，进行简单的格式化
+                        let formattedText = markdownText
+                            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')  // 粗体
+                            .replace(/\*(.*?)\*/g, '<em>$1</em>')              // 斜体
+                            .replace(/^### (.*$)/gim, '<h5>$1</h5>')          // h5标题
+                            .replace(/^## (.*$)/gim, '<h4>$1</h4>')           // h4标题
+                            .replace(/^# (.*$)/gim, '<h3>$1</h3>')            // h3标题
+                            .replace(/\n/g, '<br>');                          // 换行
+                        element.innerHTML = formattedText;
+                    }
+                } else {
+                    console.log(`元素 ${index + 1} 没有Markdown内容`);
+                }
+            });
+            
+            console.log('Markdown渲染完成');
+        }
+
+        // 页面加载完成后渲染Markdown
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMarkdown();
+        });
+
+        // 一键督办功能
+        async function superviseTodos(executorId, executorName) {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            
+            // 禁用按钮，显示加载状态
+            btn.disabled = true;
+            btn.innerHTML = '⏳ 发送中...';
+            
+            try {
+                // 获取该执行人的所有待办事项
+                const executorCard = btn.closest('.executor-card');
+                const todoItems = executorCard.querySelectorAll('.todo-item');
+                const todos = [];
+                
+                todoItems.forEach(item => {
+                    const title = item.querySelector('.todo-title').textContent.trim();
+                    const description = item.querySelector('.todo-description').textContent.trim();
+                    const metaSpans = item.querySelectorAll('.todo-meta span');
+                    let deadline = '', category = '', projects = '';
+                    
+                    metaSpans.forEach(span => {
+                        const text = span.textContent.trim();
+                        if (text.startsWith('⏰')) deadline = text.replace('⏰ ', '');
+                        else if (text.startsWith('📂')) category = text.replace('📂 ', '');
+                        else if (text.startsWith('🏗️')) projects = text.replace('🏗️ ', '');
+                    });
+                    
+                    todos.push({
+                        title: title.replace(/高优先级|中优先级|低优先级/, '').trim(),
+                        description,
+                        deadline,
+                        category,
+                        projects
+                    });
+                });
+                
+                // 发送督办请求
+                // 根据页面协议选择API地址
+                const isHttps = window.location.protocol === 'https:';
+                const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                
+                let apiBaseUrl;
+                if (isHttps && !isLocalhost) {
+                    // HTTPS环境，显示提示信息
+                    showNotification('督办功能需要在本地环境或配置HTTPS API服务器后使用', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                    return;
+                } else {
+                    // HTTP环境或本地环境，使用HTTP API
+                    apiBaseUrl = 'http://10.0.169.21:5001';
+                }
+                
+                console.log('发送督办请求到:', `${apiBaseUrl}/api/supervise_todos`);
+                console.log('请求数据:', {
+                    executor_id: executorId,
+                    executor_name: executorName,
+                    todos: todos
+                });
+                
+                const response = await fetch(`${apiBaseUrl}/api/supervise_todos`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        executor_id: executorId,
+                        executor_name: executorName,
+                        todos: todos
+                    })
+                });
+                
+                console.log('API响应状态:', response.status);
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    btn.innerHTML = '✅ 已发送';
+                    btn.style.background = '#28a745';
+                    
+                    // 显示成功提示
+                    showNotification(`已成功向 ${executorName} 发送 ${todos.length} 个待办事项`, 'success');
+                    
+                    // 3秒后恢复按钮状态
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.innerHTML = originalText;
+                        btn.style.background = '';
+                    }, 3000);
+                } else {
+                    throw new Error(result.error || '发送失败');
+                }
+                
+            } catch (error) {
+                console.error('督办发送失败:', error);
+                console.error('错误详情:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                });
+                
+                btn.innerHTML = '❌ 发送失败';
+                btn.style.background = '#dc3545';
+                
+                // 根据错误类型提供更具体的错误信息
+                let errorMessage = error.message;
+                if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    errorMessage = `网络连接失败，无法连接到API服务器 (${apiBaseUrl})`;
+                } else if (error.message.includes('Failed to fetch')) {
+                    errorMessage = `API服务器连接失败，请确认服务器是否运行在 ${apiBaseUrl}`;
+                } else if (error.message.includes('Mixed Content')) {
+                    errorMessage = `安全策略阻止：HTTPS页面无法访问HTTP API服务器 (${apiBaseUrl})，请使用HTTPS API或在本地环境测试`;
+                }
+                
+                showNotification(`向 ${executorName} 发送待办事项失败: ${errorMessage}`, 'error');
+                
+                // 3秒后恢复按钮状态
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                }, 3000);
+            }
+        }
+        
+
+
+        // 显示通知消息
+        function showNotification(message, type = 'info') {
+            // 创建通知元素
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 4px;
+                color: white;
+                font-weight: 500;
+                z-index: 1000;
+                max-width: 400px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                transition: all 0.3s ease;
+            `;
+            
+            // 根据类型设置样式
+            switch(type) {
+                case 'success':
+                    notification.style.background = '#28a745';
+                    break;
+                case 'error':
+                    notification.style.background = '#dc3545';
+                    break;
+                default:
+                    notification.style.background = '#667eea';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // 3秒后自动移除
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('日报页面加载完成，待办事项功能已就绪');
+            // 渲染Markdown内容
+            renderMarkdown();
+        });
+    </script>
+</body>
+</html>
